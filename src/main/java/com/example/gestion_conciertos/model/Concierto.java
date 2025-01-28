@@ -1,27 +1,47 @@
 package com.example.gestion_conciertos.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
+@Table(name = "Conciertos")
 public class Concierto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
+    @NotBlank(message = "El nombre del concierto no puede estar vacío")
     private String nombre;
 
     @Column(nullable = false)
-    private LocalDateTime fecha; // Usando LocalDateTime para la fecha
+    @NotNull(message = "La fecha del concierto no puede ser nula")
+    private LocalDate fecha;
 
-    // Getter y Setter
+    @Column(nullable = false, updatable = false)
+    @CreationTimestamp
+    private Timestamp fechaRegistro;
+
+    // Constructor por defecto
+    public Concierto() {}
+
+    // Constructor con parámetros
+    public Concierto(String nombre, LocalDate fecha) {
+        this.nombre = nombre;
+        this.fecha = fecha;
+    }
+    // Getters and Setters
+
     public Long getId() {
         return id;
     }
-
+    
     public void setId(Long id) {
         this.id = id;
     }
@@ -34,18 +54,25 @@ public class Concierto {
         this.nombre = nombre;
     }
 
-    public LocalDateTime getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
-    @PrePersist
-    public void prePersist() {
-        if (this.fecha == null) {
-            this.fecha = LocalDateTime.now(); // Asigna la fecha actual si es nula
-        }
+    public Timestamp getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(Timestamp fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
+    public Concierto(Long id) {
+
+        this.id = id;
+
     }
 }

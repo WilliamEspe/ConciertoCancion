@@ -2,8 +2,7 @@ package com.example.gestion_conciertos.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
+import java.util.Date;
 
 @Entity
 public class ConciertoCancion {
@@ -12,22 +11,20 @@ public class ConciertoCancion {
     private ConciertoCancionId id;
 
     @ManyToOne
-    @MapsId("conciertoId")
+    @MapsId("concierto") // Relaciona el campo concierto con la clave primaria compuesta
+    @JoinColumn(name = "concierto_id")
     private Concierto concierto;
 
     @ManyToOne
-    @MapsId("cancionId")
+    @MapsId("cancion") // Relaciona el campo cancion con la clave primaria compuesta
+    @JoinColumn(name = "cancion_id")
     private Cancion cancion;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime fechaCreacion;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaRegistro = new Date();
 
-    @PrePersist
-    public void prePersist() {
-        this.fechaCreacion = LocalDateTime.now();
-    }
-
-    // Getters y setters
+    // Getters y Setters
     public ConciertoCancionId getId() {
         return id;
     }
@@ -52,12 +49,11 @@ public class ConciertoCancion {
         this.cancion = cancion;
     }
 
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
+    public Date getFechaRegistro() {
+        return fechaRegistro;
     }
 
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 }
-

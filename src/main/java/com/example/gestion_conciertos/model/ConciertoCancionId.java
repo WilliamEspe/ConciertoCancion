@@ -1,50 +1,41 @@
 package com.example.gestion_conciertos.model;
 
-import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Embeddable
 public class ConciertoCancionId implements Serializable {
 
-    private Long conciertoId;
-    private Long cancionId;
+    private Long concierto;
+    private Long cancion;
 
-    // Constructor vacío necesario para JPA
-    public ConciertoCancionId() {}
-
-    public ConciertoCancionId(Long conciertoId, Long cancionId) {
-        this.conciertoId = conciertoId;
-        this.cancionId = cancionId;
+    // Getters y Setters
+    public Long getConcierto() {
+        return concierto;
     }
 
-    public Long getConciertoId() {
-        return conciertoId;
+    public void setConcierto(Long concierto) {
+        this.concierto = concierto;
     }
 
-    public void setConciertoId(Long conciertoId) {
-        this.conciertoId = conciertoId;
+    public Long getCancion() {
+        return cancion;
     }
 
-    public Long getCancionId() {
-        return cancionId;
+    public void setCancion(Long cancion) {
+        this.cancion = cancion;
     }
 
-    public void setCancionId(Long cancionId) {
-        this.cancionId = cancionId;
-    }
-
+    // HashCode y Equals
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ConciertoCancionId that = (ConciertoCancionId) o;
-        return Objects.equals(conciertoId, that.conciertoId) &&
-                Objects.equals(cancionId, that.cancionId);
+        return Objects.equals(concierto, that.concierto) && Objects.equals(cancion, that.cancion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(conciertoId, cancionId);
+        return Objects.hash(concierto, cancion);
     }
 }

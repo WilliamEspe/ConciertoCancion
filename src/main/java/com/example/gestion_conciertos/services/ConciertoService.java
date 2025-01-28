@@ -2,12 +2,11 @@ package com.example.gestion_conciertos.services;
 
 import com.example.gestion_conciertos.model.Concierto;
 import com.example.gestion_conciertos.repositories.ConciertoRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ConciertoService {
@@ -15,42 +14,30 @@ public class ConciertoService {
     @Autowired
     private ConciertoRepository conciertoRepository;
 
-    public Concierto crearConcierto(Concierto concierto) {
-        return conciertoRepository.save(concierto);
-    }
-
-    public Iterable<Concierto> obtenerConciertos() {
+    public List<Concierto> getAllConciertos() {
         return conciertoRepository.findAll();
     }
 
-    public Concierto obtenerConciertoPorId(Long id) {
-        return conciertoRepository.findById(id).orElse(null);
+    public Optional<Concierto> getConciertoById(Long id) {
+        return conciertoRepository.findById(id);
     }
 
-    public boolean eliminarConcierto(Long id) {
-        if (conciertoRepository.existsById(id)) {
-            conciertoRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public Concierto createConcierto(Concierto concierto) {
+        return conciertoRepository.save(concierto);
     }
 
-    public Concierto actualizarConcierto(Long id, Concierto concierto) {
-        Concierto conciertoActualizado = conciertoRepository.findById(id).orElse(null);
-        if (conciertoActualizado != null) {
-            conciertoActualizado.setNombre(concierto.getNombre());
-            return conciertoRepository.save(conciertoActualizado);
+    public Concierto updateConcierto(Long id, Concierto conciertoDetails) {
+        Optional<Concierto> concierto = conciertoRepository.findById(id);
+        if (concierto.isPresent()) {
+            Concierto updatedConcierto = concierto.get();
+            updatedConcierto.setNombre(conciertoDetails.getNombre());
+            updatedConcierto.setFecha(conciertoDetails.getFecha());
+            return conciertoRepository.save(updatedConcierto);
         }
         return null;
     }
 
-    public List<Concierto> obtenerTodosConciertos() {
-
-        // Dummy implementation, replace with actual logic
-
-        return new ArrayList<Concierto>();
-
+    public void deleteConcierto(Long id) {
+        conciertoRepository.deleteById(id);
     }
-
-
 }

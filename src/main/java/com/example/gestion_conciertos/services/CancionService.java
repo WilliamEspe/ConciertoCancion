@@ -4,7 +4,9 @@ import com.example.gestion_conciertos.model.Cancion;
 import com.example.gestion_conciertos.repositories.CancionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CancionService {
@@ -12,40 +14,30 @@ public class CancionService {
     @Autowired
     private CancionRepository cancionRepository;
 
-    public Cancion crearCancion(Cancion cancion) {
-        return cancionRepository.save(cancion);
-    }
-
-    public Iterable<Cancion> obtenerCanciones() {
+    public List<Cancion> getAllCanciones() {
         return cancionRepository.findAll();
     }
 
-    public Cancion obtenerCancionPorId(Long id) {
-        return cancionRepository.findById(id).orElse(null);
+    public Optional<Cancion> getCancionById(Long id) {
+        return cancionRepository.findById(id);
     }
 
-    public boolean eliminarCancion(Long id) {
-        if (cancionRepository.existsById(id)) {
-            cancionRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public Cancion createCancion(Cancion cancion) {
+        return cancionRepository.save(cancion);
     }
 
-    public Cancion actualizarCancion(Long id, Cancion cancion) {
-        Cancion cancionActualizada = cancionRepository.findById(id).orElse(null);
-        if (cancionActualizada != null) {
-            cancionActualizada.setNombre(cancion.getNombre());
-            return cancionRepository.save(cancionActualizada);
+    public Cancion updateCancion(Long id, Cancion cancionDetails) {
+        Optional<Cancion> cancion = cancionRepository.findById(id);
+        if (cancion.isPresent()) {
+            Cancion updatedCancion = cancion.get();
+            updatedCancion.setTitulo(cancionDetails.getTitulo());
+            updatedCancion.setDuracion(cancionDetails.getDuracion());
+            return cancionRepository.save(updatedCancion);
         }
         return null;
     }
 
-    public List<Cancion> obtenerTodasCanciones() {
-
-        // Implementation to retrieve all songs
-
-        return null; // Replace with actual implementation
-
+    public void deleteCancion(Long id) {
+        cancionRepository.deleteById(id);
     }
 }
